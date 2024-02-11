@@ -8,7 +8,7 @@
 
 <meta name="author" content="Aaron Politsky">
 <meta name="dcterms.date" content="2024-02-11">
-<meta name="description" content="In which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it’s mostly schedule luck!">
+<meta name="description" content="Your fantasy team put up a ton of points over the season, yet you missed the playoffs because your opponents always had their best weeks against you. How would your season have gone if you had a different schedule? I re-simulate 15 years of league history to quantify how un/lucky my league’s participants have been and to measure how much making the playoffs depends on schedule. (Spolier: a LOT!)">
 
 <title>Aaron’s Coding and Data Science Blog - Coming Soon: Fantasy Football Schedule Luck</title>
 <style>
@@ -120,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
             <p class="subtitle lead">Measuring the Impact of Head-to-Head Schedules on Playoff Berths</p>
                   <div>
         <div class="description">
-          In which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it’s mostly schedule luck!
+          Your fantasy team put up a ton of points over the season, yet you missed the playoffs because your opponents always had their best weeks against you. How would your season have gone if you had a different schedule? I re-simulate 15 years of league history to quantify how un/lucky my league’s participants have been and to measure how much making the playoffs depends on schedule. (Spolier: a LOT!)
         </div>
       </div>
                           <div class="quarto-categories">
@@ -162,7 +162,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Coming soon.</p>
-<p>I need to dust off the old code (base R!), so i’ll be a minute.</p>
+<p>I need to dust off the old code (base R!), so i’ll be a minute, but the gist is:</p>
+<ul>
+<li><p>In 2018 I scraped my ESPN fantasy league’s 15-season history, saving the weekly league members’ points in a csv.</p></li>
+<li><p>Then I re-simulated every season a million times, taking each owner’s weekly score as given, but randomizing the season’s head to head schedules.</p></li>
+<li><p>With the simulation results we can explore owners’ win-loss distributions, their expected win rates, see who got lucky or unlucky in a given year, and if there’s been any persistent luck pattern over the years.</p></li>
+<li><p>I find that schedule plays a huge role in determining playoff berths and using an all-play schedule format (where you play every other team each week) would mitigate this.</p></li>
+</ul>
 
 
 
