@@ -1,0 +1,10 @@
+---
+title: "Fantasy Football Schedule Luck"
+subtitle: "Measuring the Impact of Head-to-Head Schedules on Playoff Berths"
+description: "In which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it's mostly schedule luck!"
+author: "Aaron Politsky"
+date: "2024-02-11"
+categories: [data science]
+---
+
+Coming soon.
