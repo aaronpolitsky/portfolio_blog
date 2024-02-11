@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/fantasy_football_luck/index.html",
-      "/posts/purrr_for_data_validation/index.html"
+      "/posts/purrr_for_data_validation/index.html",
+      "/posts/fantasy_football_luck/index.html"
     ]
   }
 ]

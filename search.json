@@ -30,15 +30,15 @@
   {
     "objectID": "posts/fantasy_football_luck/index.html",
     "href": "posts/fantasy_football_luck/index.html",
-    "title": "Fantasy Football Schedule Luck",
+    "title": "Coming Soon: Fantasy Football Schedule Luck",
     "section": "",
-    "text": "Coming soon."
+    "text": "Coming soon.\nI need to dust off the old code (base R!), so i’ll be a minute."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Aaron’s Data Science and Coding Blog",
     "section": "",
-    "text": "Welcome!\nI want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.\nI really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.\nI’ll be posting more as I get the chance, but check out my first post:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFantasy Football Schedule Luck\n\n\nMeasuring the Impact of Head-to-Head Schedules on Playoff Berths\n\n\n\ndata science\n\n\n\nIn which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it’s mostly schedule luck!\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\n\n\n\n\n\n\nPurrr for Data Validation\n\n\nOr: Nesting Functions Into a Tibble\n\n\nTidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome!\nI want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.\nI really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.\nI’ll be posting more as I get the chance, but check out my first post:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPurrr for Data Validation\n\n\nOr: Nesting Functions Into a Tibble\n\n\nTidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\n\n\n\n\n\n\nComing Soon: Fantasy Football Schedule Luck\n\n\nMeasuring the Impact of Head-to-Head Schedules on Playoff Berths\n\n\n\ndata science\n\n\n\nIn which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it’s mostly schedule luck!\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\nNo matching items"
   }
 ]
