@@ -28,24 +28,17 @@
     "text": "Desired Output Form\nI wanted to generate a set of results for each field-test that I could tie back to individual observations in the data. Results for one particular field’s test would look like this:\n\n\n\nId\nResult\n\n\n\n\n1\nFALSE\n\n\n2\nFALSE\n\n\n…\n…\n\n\n149\nTRUE\n\n\n150\nFALSE\n\n\n\nThis is of course not very useful without knowing its corresponding field and test, so an expanded set of results might look like this:\n\n\n\n\n\n\n\n\n\nField\nTest\nId\nResult\n\n\n\n\nSepal.Length\nis_missing\n1\nTRUE\n\n\nSepal.Length\nis_missing\n2\nFALSE\n\n\nSepal.Length\nis_missing\n…\n…\n\n\nSepal.Length\nis_missing\n138\nTRUE\n\n\n…\n\n\n\n\n\nPetal.Width\nis_not_between_4_and_7_when_species_is_virginica\n32\nNA\n\n\n…\n\n\n\n\n\nPetal.Width\nis_not_between_4_and_7_when_species_is_virginica\n138\nFALSE\n\n\n…\n\n\n\n\n\nSpecies\nis_not_within_known_set\n1\nTRUE\n\n\n…\n…\n\n\n\n\n\nThe objects I would need to keep track of included:\n\nthe field-test catalog\neach field-test’s source code, parameters, and description\neach field-test’s results\nand the iris_tbl dataset itself\n\nThis smelled like the nested data workflow, but inverted. Rather than mapping one function to a group of datasets, I would feed one dataset to a group of functions."
   },
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
+    "objectID": "posts/fantasy_football_luck/index.html",
+    "href": "posts/fantasy_football_luck/index.html",
+    "title": "Fantasy Football Schedule Luck",
     "section": "",
-    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
-    "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "Coming soon."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Aaron’s Data Science and Coding Blog",
     "section": "",
-    "text": "Welcome!\nI want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.\nI really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.\nI’ll be posting more as I get the chance, but check out my first post:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPost With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\nFeb 11, 2024\n\n\nHarlow Malloc\n\n\n\n\n\n\n\n\n\n\n\n\nPurrr for Data Validation\n\n\nOr: Nesting Functions Into a Tibble\n\n\nTidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nFeb 8, 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome!\nI want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.\nI really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.\nI’ll be posting more as I get the chance, but check out my first post:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFantasy Football Schedule Luck\n\n\nMeasuring the Impact of Head-to-Head Schedules on Playoff Berths\n\n\n\ndata science\n\n\n\nIn which I quantify how un/lucky my league participants have been using ~15 years of league history. Spolier: it’s mostly schedule luck!\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\n\n\n\n\n\n\nPurrr for Data Validation\n\n\nOr: Nesting Functions Into a Tibble\n\n\nTidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.\n\n\n\n\n\nFeb 11, 2024\n\n\nAaron Politsky\n\n\n\n\n\n\nNo matching items"
   }
 ]
