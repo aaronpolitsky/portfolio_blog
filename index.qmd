@@ -1,5 +1,5 @@
 ---
-title: "Aaron's Coding Blog"
+title: "Aaron's Data Science and Coding Blog"
 subtitle: "Show and Tell, mostly with R" 
 author: "Aaron Politsky"
 listing:
