@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Purrr for Data Validation</h1>
@@ -183,8 +183,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#the-data-validation-problem" id="toc-the-data-validation-problem" class="nav-link" data-scroll-target="#the-data-validation-problem">The Data Validation Problem</a>
+  <ul class="collapse">
+  <li><a href="#example-data" id="toc-example-data" class="nav-link" data-scroll-target="#example-data">Example Data</a></li>
+  <li><a href="#the-field-test-catalog" id="toc-the-field-test-catalog" class="nav-link" data-scroll-target="#the-field-test-catalog">The Field-Test Catalog</a></li>
+  <li><a href="#desired-output-form" id="toc-desired-output-form" class="nav-link" data-scroll-target="#desired-output-form">Desired Output Form</a></li>
+  </ul></li>
+  <li><a href="#nesting-the-function-code-into-a-tibble" id="toc-nesting-the-function-code-into-a-tibble" class="nav-link" data-scroll-target="#nesting-the-function-code-into-a-tibble">Nesting the Function Code into a Tibble</a></li>
+  <li><a href="#the-real-trick-how-to-invoke-purrrmap" id="toc-the-real-trick-how-to-invoke-purrrmap" class="nav-link" data-scroll-target="#the-real-trick-how-to-invoke-purrrmap">The Real Trick: How to Invoke purrr::map()</a></li>
+  <li><a href="#a-fine-but-less-tidy-method-using-lists" id="toc-a-fine-but-less-tidy-method-using-lists" class="nav-link" data-scroll-target="#a-fine-but-less-tidy-method-using-lists">A Fine, but Less Tidy Method Using Lists</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
