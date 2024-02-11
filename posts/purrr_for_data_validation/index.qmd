@@ -1,0 +1,251 @@
+---
+title: "Purrr for Data Validation"
+subtitle: "Or: Nesting Functions Into a Tibble"
+author: "Aaron Politsky"
+date: "2/11/2024"
+description: "Tidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble."
+toc: TRUE
+toc-location: left
+---
+
+# Intro
+
+This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you're not familiar with the nested data workflow, read this [this concise article](https://tidyr.tidyverse.org/articles/nest.html) first.)
+
+So, you're at least somewhat familiar with the nested data workflow. That is, grouping your data and nesting each group's data into cells in a column called "data". You wind up with a Tidy, summarized tibble with one row per group so you can work with the nested data as a single unit.
+
+But did you ever think of nesting *source code* into a cell? If you're at all curious about how or why this might be a good idea, keep reading.
+
+My specific problem required running a bunch of data validation functions on a dataset while neatly keeping track of the functions and their results. This reminded me of the nested data workflow, but instead of iterating over groups of *data*, I wanted to iterate over a group of validation functions. My insight was to nest each function's *source code* into the tibble, execute each one on the data, and nest the results into a column.
+
+For even more background on the nested data paradigm, read [this chapter of R4DS](https://r4ds.had.co.nz/many-models.html).
+
+# The Data Validation Problem
+
+I wanted to validate new data as it arrived to get a sense of its reliability, so I needed to test certain fields to determine if their values made sense and were analytically useful. I had to run a set of tests on each value in the dataset in order to:
+
+-   determine what subset of the data was OK to use right away,
+
+-   judge whether the dataset as a whole was ok to use,
+
+-   and decide whether I would need to contact the data provider to address any quality issues.
+
+Many tests were sanity checks, whether a datapoint fell between a lower and upper bound, among others. Others could be more complex. Each field required its own set of validation tests, sometimes fairly unique to that field.
+
+## Example Data
+
+I'll use iris as the example dataset. It's got four decimal fields and one factor field per observation.
+
+```{r echo=FALSE, message=FALSE}
+library(tidyverse)
+
+iris_tbl <- 
+  iris %>% 
+  as_tibble(rownames = "id")
+
+iris_tbl
+```
+
+## The Field-Test Catalog
+
+As I thought about the problem, it became clear that I would want to define a set of tests for each field and keep track of the field-test catalog in a list or a table structure.
+
+The catalog of field-tests might look something like this:
+
+| Field Name   | Test Name                                        |
+|--------------|--------------------------------------------------|
+| Sepal.Length | is_missing                                       |
+| Sepal.Length | is_not_between_3_and_7                           |
+| Sepal.Length | is_less_than_sepal_width                         |
+| ...          | ...                                              |
+| Sepal.Width  | is_missing                                       |
+| Sepal.Width  | ...                                              |
+| ...          | ...                                              |
+| Petal.Length | is_missing                                       |
+| Petal.Length | is_not_between_4_and_7_when_species_is_virginica |
+| ...          |                                                  |
+
+## Desired Output Form
+
+I wanted to generate a set of results for each field-test that I could tie back to individual observations in the data. Results for one particular field's test would look like this:
+
+| Id  | Result |
+|-----|--------|
+| 1   | FALSE  |
+| 2   | FALSE  |
+| ... | ...    |
+| 149 | TRUE   |
+| 150 | FALSE  |
+
+This is of course not very useful without knowing its corresponding field and test, so an expanded set of results might look like this:
+
+| Field        | Test                                             | Id  | Result |
+|-----------------|---------------------|-----------------|-----------------|
+| Sepal.Length | is_missing                                       | 1   | TRUE   |
+| Sepal.Length | is_missing                                       | 2   | FALSE  |
+| Sepal.Length | is_missing                                       | ... | ...    |
+| Sepal.Length | is_missing                                       | 138 | TRUE   |
+| ...          |                                                  |     |        |
+| Petal.Width  | is_not_between_4_and_7_when_species_is_virginica | 32  | NA     |
+| ...          |                                                  |     |        |
+| Petal.Width  | is_not_between_4_and_7_when_species_is_virginica | 138 | FALSE  |
+| ...          |                                                  |     |        |
+| Species      | is_not_within_known_set                          | 1   | TRUE   |
+| ...          | ...                                              |     |        |
+
+The objects I would need to keep track of included:
+
+1.  the field-test catalog
+
+2.  each field-test's source code, parameters, and description
+
+3.  each field-test's results
+
+4.  and the iris_tbl dataset itself
+
+This smelled like the nested data workflow, but inverted. Rather than mapping one function to a group of datasets, I would feed one dataset to a group of functions.
+
+# Nesting the Function Code into a Tibble
+
+I made a hierarchical list for the field test functions, and then I converted it into a tibble like so:
+
+```{r}
+
+field_test_functions_list <- list(
+  "Sepal.Length" = list(
+    "is_missing" = function(data) {
+      data %>% 
+        mutate(result = is.na(Sepal.Length)) %>% 
+        select(id, result)
+    }
+  ),
+  "Sepal.Width" = list(
+    "is_missing" = function(data) {
+      data %>% 
+        mutate(result = is.na(Sepal.Width)) %>% 
+        select(id, result)
+    }
+  ),
+  "Petal.Length" = list(
+    "is_missing" = function(data) {
+      data %>% 
+        mutate(result = is.na(Petal.Width)) %>% 
+        select(id, result)
+    },
+    "is_not_between_4_and_7_when_species_is_virginica" = function(data) {
+      data %>% 
+        mutate(result = if_else(Species == "virginica",  
+                                !between(Petal.Length, 4, 7),
+                                NA)) %>%
+        select(id, result)
+    }
+  ),
+  "Species" = list(
+    "is_not_within_known_set" = function(data) {
+      data %>% 
+        mutate(result = 
+                 !(Species %in% c("setosa", "versicolor", "virginica"))) %>% 
+        select(id, result)
+    }
+  )
+)
+
+```
+
+Now let's convert that to a tibble, in steps.
+
+```{r}
+
+lapply(field_test_functions_list, enframe, name = "test", value = "fun") 
+
+```
+
+Now let's make that into a tibble using enframe
+
+```{r}
+
+lapply(field_test_functions_list, enframe, name = "test", value = "fun") %>% 
+  enframe(name = "field", value = "test_tibble") 
+
+```
+
+And one more step: unnest the test_tibbles
+
+```{r}
+
+field_test_tibble <- 
+  lapply(field_test_functions_list, enframe, name = "test", value = "fun") %>% 
+  enframe(name = "field", value = "test_tibble") %>%  
+  unnest(test_tibble)
+
+field_test_tibble
+
+```
+
+Now we have our Tidy field-tests tibble, and we're ready to iterate using purrr::map.
+
+# The Real Trick: How to Invoke purrr::map()
+
+We are iterating over test functions we've named `fun`, and we want to *execute* each of them. This is the really meta part: we want to `map()` the function `exec()` onto each `fun`.
+
+In `purrr::map` syntax, where we normally would map a function .f to data .x like this: `map(.x = data, .f = fun)`
+
+But instead we do this: `map(.x = fun, .f = exec)`
+
+And since each `fun` expects the argument `data`, we pass it as a third argument: `map(.x = fun, .f = exec, data = iris_tbl)`
+
+This will produce our result tibble for each field test, so we can do that all within mutate like so:
+
+```{r}
+field_tests_with_results <- 
+  field_test_tibble %>% 
+  mutate(results = map(.x = fun, .f = exec, data = iris_tbl))
+
+field_tests_with_results %>% 
+  select(field, test, results)
+```
+
+And of course, we can then unnest our results into our desired tabular output:
+
+```{r}
+field_tests_with_results %>% 
+  select(field, test, results) %>% 
+  unnest(results)
+```
+
+But why do it this way? Couldn't I just do this using vectors and lists?
+
+# A Fine, but Less Tidy Method Using Lists
+
+One way I might have done this before knowing about nested tibbles is to iterate over the field test list to create a separate, hierarchical results list.
+
+This is...fine. But if you're used to working with Tidy tibbles and dplyr-like verbs you might find it unsatisfying.
+
+Furthermore, if you care about future-proofing it for other users (including your future self), it might bother you that the field test code will be in one object and its results in another. Mistakes happen!
+
+Given the field_test_functions_list I created above, I would iterate over our fields using lapply, and within that, iterate over each of its tests using another lapply.
+
+```{r results_in_list_form}
+
+# iterate over field names, and test names within them, executing test functions on iris
+field_test_results <- lapply(X = field_test_functions_list, 
+                             # for each field fn, which is a list of tests...
+                             FUN = function(tests) {
+                               # execute each test, each of which are functions
+                               lapply(X = tests, 
+                                      FUN = function(test) {
+                                        exec(test, data = iris_tbl)
+                                      })
+                             })
+
+field_test_results 
+
+```
+
+Now if we want to get to tabular data, we might need to access it using field names and field tests
+
+```{r}
+lapply(field_test_results, lapply, count, result)
+```
+
+It's fine to store the results in a list. But the Tidyverse likes tabular data, and I was ultimately going to target an expanded tibble having field, test name, id, and result, and that lent itself to using a nested tibble.
