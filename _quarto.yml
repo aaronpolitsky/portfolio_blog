@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "quarto_portfolio_blog"
+  title: "Aaron's Coding and Data Science Blog"
   navbar:
     right:
       - about.qmd
