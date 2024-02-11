@@ -13,7 +13,7 @@ page-layout: full
 title-block-banner: true
 ---
 
-Welcome!
+Welcome! 
 
 I want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.
 
