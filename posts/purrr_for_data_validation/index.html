@@ -157,7 +157,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           Tidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">data science</div>
+                <div class="quarto-category">functional programming</div>
+                <div class="quarto-category">purrr</div>
+                <div class="quarto-category">nested tibbles</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -189,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-  <li><a href="#the-data-validation-problem" id="toc-the-data-validation-problem" class="nav-link" data-scroll-target="#the-data-validation-problem">The Data Validation Problem</a>
+  <li><a href="#the-example-data-validation-problem" id="toc-the-example-data-validation-problem" class="nav-link" data-scroll-target="#the-example-data-validation-problem">The Example Data Validation Problem</a>
   <ul class="collapse">
   <li><a href="#example-data" id="toc-example-data" class="nav-link" data-scroll-target="#example-data">Example Data</a></li>
   <li><a href="#the-field-test-catalog" id="toc-the-field-test-catalog" class="nav-link" data-scroll-target="#the-field-test-catalog">The Field-Test Catalog</a></li>
@@ -197,7 +203,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#nesting-the-function-code-into-a-tibble" id="toc-nesting-the-function-code-into-a-tibble" class="nav-link" data-scroll-target="#nesting-the-function-code-into-a-tibble">Nesting the Function Code into a Tibble</a></li>
   <li><a href="#the-real-trick-how-to-invoke-purrrmap" id="toc-the-real-trick-how-to-invoke-purrrmap" class="nav-link" data-scroll-target="#the-real-trick-how-to-invoke-purrrmap">The Real Trick: How to Invoke purrr::map()</a></li>
-  <li><a href="#a-fine-but-less-tidy-method-using-lists" id="toc-a-fine-but-less-tidy-method-using-lists" class="nav-link" data-scroll-target="#a-fine-but-less-tidy-method-using-lists">A Fine, but Less Tidy Method Using Lists</a></li>
+  <li><a href="#a-fine-but-less-tidy-method-using-lists" id="toc-a-fine-but-less-tidy-method-using-lists" class="nav-link" data-scroll-target="#a-fine-but-less-tidy-method-using-lists">A Fine but Less Tidy Method Using Lists</a></li>
+  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts">Closing Thoughts</a></li>
   </ul>
 </nav>
 </nav>
@@ -214,24 +221,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you’re not familiar with the nested data workflow, read this <a href="https://tidyr.tidyverse.org/articles/nest.html">this concise article</a> first.)</p>
-<p>So, you’re at least somewhat familiar with the nested data workflow. That is, grouping your data and nesting each group’s data into cells in a column called “data”. You wind up with a Tidy, summarized tibble with one row per group so you can work with the nested data as a single unit.</p>
+<p>This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you’re not familiar with the nested data workflow, read this <a href="https://tidyr.tidyverse.org/articles/nest.html">this concise article</a> first, and for more depth, read <a href="https://r4ds.had.co.nz/many-models.html">this chapter of R4DS</a>.) I’ll wait.</p>
+<p>OK, Great. Now you’re at least somewhat familiar with the nested data workflow. That is, grouping your data and nesting each group’s data into cells in a column called “data”. You wind up with a Tidy, summarized tibble with one row per group so you can work with the nested data as a if it were a single value in a cell.</p>
 <p>But did you ever think of nesting <em>source code</em> into a cell? If you’re at all curious about how or why this might be a good idea, keep reading.</p>
-<p>My specific problem required running a bunch of data validation functions on a dataset while neatly keeping track of the functions and their results. This reminded me of the nested data workflow, but instead of iterating over groups of <em>data</em>, I wanted to iterate over a group of validation functions. My insight was to nest each function’s <em>source code</em> into the tibble, execute each one on the data, and nest the results into a column.</p>
-<p>For even more background on the nested data paradigm, read <a href="https://r4ds.had.co.nz/many-models.html">this chapter of R4DS</a>.</p>
+<p>My specific problem required running a bunch of data validation tests on a dataset, and I wanted to neatly keep track of the tests, their code, and their results. This reminded me of the nested data workflow, but instead of iterating over groups of <em>data</em>, I wanted to iterate over a group of validation functions. My insight was to nest each test’s <em>source code</em> into the tibble, execute each test on the data, and nest its results into another column, leaving me with a single, Tidy tibble having the test names, their code, and their results.</p>
+<p>But why do it this way? Couldn’t you use base R using several separate lists and a vector of test names to access them? Sure, but I prefer having all this in one table. When everything is neatly tied together in rows it’s less error prone. Plus it’s Tidy, so it will be easy to work with later using the typical tidyverse methods.</p>
+<p>Whereas using separate lists, it’s up to you to keep everything straight since the lists aren’t aware of one another. Someone (such as <em>future me</em>) could come along and accidentally rename the elements of one of the lists without updating the others, and it would fail quietly.</p>
+<p>Let’s motivate this solution with an example problem.</p>
 </section>
-<section id="the-data-validation-problem" class="level1">
-<h1>The Data Validation Problem</h1>
-<p>I wanted to validate new data as it arrived to get a sense of its reliability, so I needed to test certain fields to determine if their values made sense and were analytically useful. I had to run a set of tests on each value in the dataset in order to:</p>
+<section id="the-example-data-validation-problem" class="level1">
+<h1>The Example Data Validation Problem</h1>
+<p>In my case, I periodically received new data, and I wanted to validate them after arrival to get a sense of reliability and readiness. I needed to test certain fields to determine if their values made sense and were analytically useful. I would run a set of tests on each value in the dataset in order to:</p>
 <ul>
 <li><p>determine what subset of the data was OK to use right away,</p></li>
 <li><p>judge whether the dataset as a whole was ok to use,</p></li>
 <li><p>and decide whether I would need to contact the data provider to address any quality issues.</p></li>
 </ul>
-<p>Many tests were sanity checks, whether a datapoint fell between a lower and upper bound, among others. Others could be more complex. Each field required its own set of validation tests, sometimes fairly unique to that field.</p>
+<p>Many tests would be sanity checks, whether a datapoint fell between a lower and upper bound, among others. Others could be more complex. And each field would require its own set of validation tests, sometimes fairly unique to that field.</p>
 <section id="example-data" class="level2">
 <h2 class="anchored" data-anchor-id="example-data">Example Data</h2>
-<p>I’ll use iris as the example dataset. It’s got four decimal fields and one factor field per observation.</p>
+<p>I’ll use <code>iris</code> as the example dataset. It’s got four decimal fields and one factor field per observation.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 150 × 6
@@ -254,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="the-field-test-catalog" class="level2">
 <h2 class="anchored" data-anchor-id="the-field-test-catalog">The Field-Test Catalog</h2>
-<p>As I thought about the problem, it became clear that I would want to define a set of tests for each field and keep track of the field-test catalog in a list or a table structure.</p>
+<p>As I thought about the problem, it became clear that I would want to define a set of validation tests for each field and keep track of the field-test catalog in a list or a table structure.</p>
 <p>The catalog of field-tests might look something like this:</p>
 <table class="table">
 <thead>
@@ -340,13 +349,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>This is of course not very useful without knowing its corresponding field and test, so an expanded set of results might look like this:</p>
+<p>This is of course not very useful without knowing its corresponding field and test, so an expanded, flat set of results might look like this:</p>
 <table class="table">
 <colgroup>
-<col style="width: 23%">
-<col style="width: 29%">
-<col style="width: 23%">
-<col style="width: 23%">
+<col style="width: 24%">
+<col style="width: 27%">
+<col style="width: 24%">
+<col style="width: 24%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -508,7 +517,7 @@ $Species
 1 is_not_within_known_set &lt;fn&gt;  </code></pre>
 </div>
 </div>
-<p>Now let’s make that into a tibble using enframe</p>
+<p>Now let’s make that into a tibble using <code>enframe()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(field_test_functions_list, enframe, <span class="at">name =</span> <span class="st">"test"</span>, <span class="at">value =</span> <span class="st">"fun"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enframe</span>(<span class="at">name =</span> <span class="st">"field"</span>, <span class="at">value =</span> <span class="st">"test_tibble"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -522,7 +531,7 @@ $Species
 4 Species      &lt;tibble [1 × 2]&gt;</code></pre>
 </div>
 </div>
-<p>And one more step: unnest the test_tibbles</p>
+<p>And one more step: <code>unnest()</code> the test_tibbles:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>field_test_tibble <span class="ot">&lt;-</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(field_test_functions_list, enframe, <span class="at">name =</span> <span class="st">"test"</span>, <span class="at">value =</span> <span class="st">"fun"</span>) <span class="sc">%&gt;%</span> </span>
@@ -541,33 +550,35 @@ $Species
 5 Species      is_not_within_known_set                          &lt;fn&gt;  </code></pre>
 </div>
 </div>
-<p>Now we have our Tidy field-tests tibble, and we’re ready to iterate using purrr::map.</p>
+<p>Now we have our Tidy field-tests tibble, and we’re ready to iterate using <code>purrr::map</code>.</p>
 </section>
 <section id="the-real-trick-how-to-invoke-purrrmap" class="level1">
 <h1>The Real Trick: How to Invoke purrr::map()</h1>
 <p>We are iterating over test functions we’ve named <code>fun</code>, and we want to <em>execute</em> each of them. This is the really meta part: we want to <code>map()</code> the function <code>exec()</code> onto each <code>fun</code>.</p>
-<p>In <code>purrr::map</code> syntax, where we normally would map a function .f to data .x like this: <code>map(.x = data, .f = fun)</code></p>
-<p>But instead we do this: <code>map(.x = fun, .f = exec)</code></p>
-<p>And since each <code>fun</code> expects the argument <code>data</code>, we pass it as a third argument: <code>map(.x = fun, .f = exec, data = iris_tbl)</code></p>
-<p>This will produce our result tibble for each field test, so we can do that all within mutate like so:</p>
+<p>In <code>purrr::map</code> syntax, we normally would map a function <code>.f</code> to data <code>.x</code> like this:</p>
+<p><code>map(.x = data, .f = fun)</code></p>
+<p>But instead we need to do this: <code>map(.x = fun, .f = exec)</code></p>
+<p>And since each <code>fun</code> expects the argument <code>data</code>, we pass it as a third argument:</p>
+<p><code>map(.x = fun, .f = exec, data = iris_tbl)</code></p>
+<p>This will produce our result tibble for each field test, so we can do that all within <code>mutate</code> like so:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>field_tests_with_results <span class="ot">&lt;-</span> </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  field_test_tibble <span class="sc">%&gt;%</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">results =</span> <span class="fu">map</span>(<span class="at">.x =</span> fun, <span class="at">.f =</span> exec, <span class="at">data =</span> iris_tbl))</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>field_tests_with_results <span class="sc">%&gt;%</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(field, test, results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>field_tests_with_results </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 3
-  field        test                                             results 
-  &lt;chr&gt;        &lt;chr&gt;                                            &lt;list&gt;  
-1 Sepal.Length is_missing                                       &lt;tibble&gt;
-2 Sepal.Width  is_missing                                       &lt;tibble&gt;
-3 Petal.Length is_missing                                       &lt;tibble&gt;
-4 Petal.Length is_not_between_4_and_7_when_species_is_virginica &lt;tibble&gt;
-5 Species      is_not_within_known_set                          &lt;tibble&gt;</code></pre>
+<pre><code># A tibble: 5 × 4
+  field        test                                             fun    results 
+  &lt;chr&gt;        &lt;chr&gt;                                            &lt;list&gt; &lt;list&gt;  
+1 Sepal.Length is_missing                                       &lt;fn&gt;   &lt;tibble&gt;
+2 Sepal.Width  is_missing                                       &lt;fn&gt;   &lt;tibble&gt;
+3 Petal.Length is_missing                                       &lt;fn&gt;   &lt;tibble&gt;
+4 Petal.Length is_not_between_4_and_7_when_species_is_virginica &lt;fn&gt;   &lt;tibble&gt;
+5 Species      is_not_within_known_set                          &lt;fn&gt;   &lt;tibble&gt;</code></pre>
 </div>
 </div>
+<p>As you can see, Each field-test’s field name, test name, code, and results are all tied together in a row.</p>
 <p>And of course, we can then unnest our results into our desired tabular output:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>field_tests_with_results <span class="sc">%&gt;%</span> </span>
@@ -591,14 +602,15 @@ $Species
 # ℹ Use `print(n = ...)` to see more rows</code></pre>
 </div>
 </div>
+<p><em>Note: since <code>data</code> is a constant, it doesn’t need to live in our tibble, which would be duplicative and likely make our tibble enormous.</em></p>
 <p>But why do it this way? Couldn’t I just do this using vectors and lists?</p>
 </section>
 <section id="a-fine-but-less-tidy-method-using-lists" class="level1">
-<h1>A Fine, but Less Tidy Method Using Lists</h1>
+<h1>A Fine but Less Tidy Method Using Lists</h1>
 <p>One way I might have done this before knowing about nested tibbles is to iterate over the field test list to create a separate, hierarchical results list.</p>
 <p>This is…fine. But if you’re used to working with Tidy tibbles and dplyr-like verbs you might find it unsatisfying.</p>
-<p>Furthermore, if you care about future-proofing it for other users (including your future self), it might bother you that the field test code will be in one object and its results in another. Mistakes happen!</p>
-<p>Given the field_test_functions_list I created above, I would iterate over our fields using lapply, and within that, iterate over each of its tests using another lapply.</p>
+<p>Furthermore, if you care about future-proofing it for other users (including your future self), it might bother you that the field test code will be in one object and its results in another, since they aren’t aware of each other and it’s up to the developer to make sure the names stay correct. Mistakes happen!</p>
+<p>In any case, here’s how I would do it. Given the <code>field_test_functions_list</code> I created above, I would iterate over our fields using <code>lapply</code>, and within that, iterate over each of its tests using another <code>lapply</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># iterate over field names, and test names within them, executing test functions on iris</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>field_test_results <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> field_test_functions_list, </span>
@@ -611,85 +623,48 @@ $Species
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                                      })</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                             })</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>field_test_results </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(field_test_results) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$Sepal.Length
-$Sepal.Length$is_missing
-# A tibble: 150 × 2
-   id    result
-   &lt;chr&gt; &lt;lgl&gt; 
- 1 1     FALSE 
- 2 2     FALSE 
- 3 3     FALSE 
- 4 4     FALSE 
- 5 5     FALSE 
- 6 6     FALSE 
- 7 7     FALSE 
- 8 8     FALSE 
- 9 9     FALSE 
-10 10    FALSE 
-# … with 140 more rows
-# ℹ Use `print(n = ...)` to see more rows
-
-
-$Sepal.Width
-$Sepal.Width$is_missing
-# A tibble: 150 × 2
-   id    result
-   &lt;chr&gt; &lt;lgl&gt; 
- 1 1     FALSE 
- 2 2     FALSE 
- 3 3     FALSE 
- 4 4     FALSE 
- 5 5     FALSE 
- 6 6     FALSE 
- 7 7     FALSE 
- 8 8     FALSE 
- 9 9     FALSE 
-10 10    FALSE 
-# … with 140 more rows
-# ℹ Use `print(n = ...)` to see more rows
-
-
-$Petal.Length
-$Petal.Length$is_missing
-# A tibble: 150 × 2
-   id    result
-   &lt;chr&gt; &lt;lgl&gt; 
- 1 1     FALSE 
- 2 2     FALSE 
- 3 3     FALSE 
- 4 4     FALSE 
- 5 5     FALSE 
- 6 6     FALSE 
- 7 7     FALSE 
- 8 8     FALSE 
- 9 9     FALSE 
-10 10    FALSE 
-# … with 140 more rows
-# ℹ Use `print(n = ...)` to see more rows
-
-$Petal.Length$is_not_between_4_and_7_when_species_is_virginica
-# A tibble: 150 × 2
-   id    result
-   &lt;chr&gt; &lt;lgl&gt; 
- 1 1     NA    
- 2 2     NA    
- 3 3     NA    
- 4 4     NA    
- 5 5     NA    
- 6 6     NA    
- 7 7     NA    
- 8 8     NA    
- 9 9     NA    
-10 10    NA    
-# … with 140 more rows
-# ℹ Use `print(n = ...)` to see more rows
-
-
-$Species
-$Species$is_not_within_known_set
-# A tibble: 150 × 2
+<pre><code>List of 4
+ $ Sepal.Length:List of 1
+  ..$ is_missing: tibble [150 × 2] (S3: tbl_df/tbl/data.frame)
+  .. ..$ id    : chr [1:150] "1" "2" "3" "4" ...
+  .. ..$ result: logi [1:150] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ Sepal.Width :List of 1
+  ..$ is_missing: tibble [150 × 2] (S3: tbl_df/tbl/data.frame)
+  .. ..$ id    : chr [1:150] "1" "2" "3" "4" ...
+  .. ..$ result: logi [1:150] FALSE FALSE FALSE FALSE FALSE FALSE ...
+ $ Petal.Length:List of 2
+  ..$ is_missing                                      : tibble [150 × 2] (S3: tbl_df/tbl/data.frame)
+  .. ..$ id    : chr [1:150] "1" "2" "3" "4" ...
+  .. ..$ result: logi [1:150] FALSE FALSE FALSE FALSE FALSE FALSE ...
+  ..$ is_not_between_4_and_7_when_species_is_virginica: tibble [150 × 2] (S3: tbl_df/tbl/data.frame)
+  .. ..$ id    : chr [1:150] "1" "2" "3" "4" ...
+  .. ..$ result: logi [1:150] NA NA NA NA NA NA ...
+ $ Species     :List of 1
+  ..$ is_not_within_known_set: tibble [150 × 2] (S3: tbl_df/tbl/data.frame)
+  .. ..$ id    : chr [1:150] "1" "2" "3" "4" ...
+  .. ..$ result: logi [1:150] FALSE FALSE FALSE FALSE FALSE FALSE ...</code></pre>
+</div>
+</div>
+<p>Now if we want to examine a given field test and its results, we would need to select it with a field name and a test name.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fields <span class="ot">&lt;-</span> <span class="fu">names</span>(field_test_functions_list)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>tests <span class="ot">&lt;-</span> <span class="fu">names</span>(field_test_functions_list[[fields[<span class="dv">2</span>]]])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>field_test_functions_list[[fields[<span class="dv">2</span>]]][[tests[<span class="dv">1</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function(data) {
+      data %&gt;% 
+        mutate(result = is.na(Sepal.Width)) %&gt;% 
+        select(id, result)
+    }
+&lt;bytecode: 0x7fea98f27ea8&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>field_test_results[[fields[<span class="dv">2</span>]]][[tests[<span class="dv">1</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 150 × 2
    id    result
    &lt;chr&gt; &lt;lgl&gt; 
  1 1     FALSE 
@@ -706,50 +681,12 @@ $Species$is_not_within_known_set
 # ℹ Use `print(n = ...)` to see more rows</code></pre>
 </div>
 </div>
-<p>Now if we want to get to tabular data, we might need to access it using field names and field tests</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(field_test_results, lapply, count, result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$Sepal.Length
-$Sepal.Length$is_missing
-# A tibble: 1 × 2
-  result     n
-  &lt;lgl&gt;  &lt;int&gt;
-1 FALSE    150
-
-
-$Sepal.Width
-$Sepal.Width$is_missing
-# A tibble: 1 × 2
-  result     n
-  &lt;lgl&gt;  &lt;int&gt;
-1 FALSE    150
-
-
-$Petal.Length
-$Petal.Length$is_missing
-# A tibble: 1 × 2
-  result     n
-  &lt;lgl&gt;  &lt;int&gt;
-1 FALSE    150
-
-$Petal.Length$is_not_between_4_and_7_when_species_is_virginica
-# A tibble: 2 × 2
-  result     n
-  &lt;lgl&gt;  &lt;int&gt;
-1 FALSE     50
-2 NA       100
-
-
-$Species
-$Species$is_not_within_known_set
-# A tibble: 1 × 2
-  result     n
-  &lt;lgl&gt;  &lt;int&gt;
-1 FALSE    150</code></pre>
-</div>
-</div>
-<p>It’s fine to store the results in a list. But the Tidyverse likes tabular data, and I was ultimately going to target an expanded tibble having field, test name, id, and result, and that lent itself to using a nested tibble.</p>
+<p>Again, this is fine, but it feels more precarious as a developer. Perhaps you might alleviate some of that fragility by storing the results and the functions in the same list. That would probably be an improvement. But still, a hierarchical list still doesn’t lend itself to using tidyverse verbs, which is partially why I prefer my solution.</p>
+</section>
+<section id="closing-thoughts" class="level1">
+<h1>Closing Thoughts</h1>
+<p>If you’re familiar with the paradigm of iterating over nested data, hopefully this gets you thinking about extending that pattern. After all, you can nest anything into a cell.</p>
+<p>For my data validation problem, I could have used a set of lists and <code>lapply</code>, but I find it more fragile and prefer playing well with the tidyverse, which likes tabular data. So I targeted building a single, Tidy tibble with columns for field, test name, each datapoint’s id, and test result. The twist was to nest source code into a cell and using <code>purrr::map</code> to execute each test.</p>
 
 
 </section>
