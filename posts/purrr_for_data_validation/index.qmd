@@ -6,6 +6,7 @@ date: "2/11/2024"
 description: "Tidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble."
 toc: TRUE
 toc-location: left
+categories: [data science, functional programming, purrr, nested tibbles]
 ---
 
 # Intro
