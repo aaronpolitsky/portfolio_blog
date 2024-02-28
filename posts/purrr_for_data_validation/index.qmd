@@ -11,7 +11,7 @@ categories: [data science, functional programming, purrr, nested tibbles]
 
 # Intro
 
-This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you're not familiar with the nested data workflow, read this [this concise article](https://tidyr.tidyverse.org/articles/nest.html) first, and for more depth, read [this chapter of R4DS](https://r4ds.had.co.nz/many-models.html).) I'll wait.
+This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you're not familiar with the nested data workflow, read this [this concise article](https://tidyr.tidyverse.org/articles/nest.html) first, and for more depth, read [this chapter of R4DS](https://r4ds.had.co.nz/many-models.html). I'll wait.)
 
 OK, Great. Now you're at least somewhat familiar with the nested data workflow. That is, grouping your data and nesting each group's data into cells in a column called "data". You wind up with a Tidy, summarized tibble with one row per group so you can work with the nested data as a if it were a single value in a cell.
 
@@ -85,7 +85,7 @@ I wanted to generate a set of results for each field-test that I could tie back 
 This is of course not very useful without knowing its corresponding field and test, so an expanded, flat set of results might look like this:
 
 | Field        | Test                                             | Id  | Result |
-|------------------|--------------------|------------------|------------------|
+|------------------|-------------------|------------------|------------------|
 | Sepal.Length | is_missing                                       | 1   | TRUE   |
 | Sepal.Length | is_missing                                       | 2   | FALSE  |
 | Sepal.Length | is_missing                                       | ... | ...    |
@@ -268,7 +268,7 @@ field_test_results[[fields[2]]][[tests[1]]]
 
 Again, this is fine, but it feels more precarious as a developer. Perhaps you might alleviate some of that fragility by storing the results and the functions in the same list. That would probably be an improvement. But still, a hierarchical list still doesn't lend itself to using tidyverse verbs, which is partially why I prefer my solution.
 
-# Closing Thoughts 
+# Closing Thoughts
 
 If you're familiar with the paradigm of iterating over nested data, hopefully this gets you thinking about extending that pattern. After all, you can nest anything into a cell.
 
