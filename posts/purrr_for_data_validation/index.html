@@ -162,6 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 <div class="quarto-category">functional programming</div>
                 <div class="quarto-category">purrr</div>
                 <div class="quarto-category">nested tibbles</div>
+                <div class="quarto-category">R</div>
               </div>
                   </div>
   </div>
@@ -221,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you’re not familiar with the nested data workflow, read this <a href="https://tidyr.tidyverse.org/articles/nest.html">this concise article</a> first, and for more depth, read <a href="https://r4ds.had.co.nz/many-models.html">this chapter of R4DS</a>.) I’ll wait.</p>
+<p>This post explains an insight I had when thinking about a data validation problem, and I hope this example problem will get you thinking more creatively about the possibilities of nested tibbles. (If you’re not familiar with the nested data workflow, read this <a href="https://tidyr.tidyverse.org/articles/nest.html">this concise article</a> first, and for more depth, read <a href="https://r4ds.had.co.nz/many-models.html">this chapter of R4DS</a>. I’ll wait.)</p>
 <p>OK, Great. Now you’re at least somewhat familiar with the nested data workflow. That is, grouping your data and nesting each group’s data into cells in a column called “data”. You wind up with a Tidy, summarized tibble with one row per group so you can work with the nested data as a if it were a single value in a cell.</p>
 <p>But did you ever think of nesting <em>source code</em> into a cell? If you’re at all curious about how or why this might be a good idea, keep reading.</p>
 <p>My specific problem required running a bunch of data validation tests on a dataset, and I wanted to neatly keep track of the tests, their code, and their results. This reminded me of the nested data workflow, but instead of iterating over groups of <em>data</em>, I wanted to iterate over a group of validation functions. My insight was to nest each test’s <em>source code</em> into the tibble, execute each test on the data, and nest its results into another column, leaving me with a single, Tidy tibble having the test names, their code, and their results.</p>
@@ -353,7 +354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <table class="table">
 <colgroup>
 <col style="width: 24%">
-<col style="width: 27%">
+<col style="width: 26%">
 <col style="width: 24%">
 <col style="width: 24%">
 </colgroup>
@@ -660,7 +661,7 @@ $Species
         mutate(result = is.na(Sepal.Width)) %&gt;% 
         select(id, result)
     }
-&lt;bytecode: 0x7fea98f27ea8&gt;</code></pre>
+&lt;bytecode: 0x7fe50771dc18&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>field_test_results[[fields[<span class="dv">2</span>]]][[tests[<span class="dv">1</span>]]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
