@@ -10,6 +10,7 @@ website:
         href: https://github.com/aaronpolitsky
       - icon: linkedin
         href: https://www.linkedin.com/in/aaronpolitsky
+  google-analytics: "446795634"        
 format:
   html:
     theme: cosmo
