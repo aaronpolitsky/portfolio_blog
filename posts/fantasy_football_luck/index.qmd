@@ -18,3 +18,29 @@ I need to dust off the old code (base R!), so i'll be a minute, but the gist is:
 -   With the simulation results we can explore owners' win-loss distributions, their expected win rates, see who got lucky or unlucky in a given year, and if there's been any persistent luck pattern over the years.
 
 -   I find that schedule plays a huge role in determining playoff berths and using an all-play schedule format (where you play every other team each week) would mitigate this.
+
+## Intro
+
+Most fantasy football leagues use a head-to-head format, basing playoff berths on win-loss records. Meaning, every week of the regular season, your fantasy team goes up against another participant's team, and whichever team scored more points gets the win. At the end of the regular season, your head-to-head win-loss record determines whether you make the playoffs. I'm simplifying of course, but the win-loss record is typically the chief determinant of playoff berth.
+
+Under this format, it's quite common for your team to have a low scoring week but still eke out a win because your opponent's team had an even lower score. On the flipside, you may have had the second highest score for the week, but you faced the team with the highest score. Contrary to real football, your fantasy football opponent's team has basically no bearing on how well your team performs. By and large you are trying for the highest score[^1], so your opponent is basically interchangeable. So it's legitimate to claim that your record may have been meaningfully better (or worse) had your regular season schedule been different.
+
+[^1]: I acknowledge that in a given week you might start a lower risk-reward player if you expect to win the matchup, and vice versa if you are the underdog. But I would argue this is only important on the margin and that job one is to maximize expected points.
+
+I wondered how my league's results might have been different under different schedules, so I set out to measure the impact scheduling had on playoff berths over the years by simulating alternate schedules and analyzing the distribution of results.
+
+I found ...
+
+## The Plan: Resimulate League History with Alternate Schedules
+
+-   I scraped my ESPN fantasy league's 13-season history, saving each team's weekly points in a csv.
+
+-   Then I re-simulated every season a million times, taking each owner's weekly score as given, but randomizing the season's head to head schedules.
+
+-   With the simulation results we can explore owners' win-loss distributions, their expected win rates, and see who got lucky or unlucky in a given year, and if any participants have enjoyed persistent luckiness over the years.
+
+-   I find that schedule plays a huge role in determining playoff berth and that using an all-play schedule format (where you play every other team each week) would mitigate this.
+
+## Reading the League History
+
+... (when I get to it)
