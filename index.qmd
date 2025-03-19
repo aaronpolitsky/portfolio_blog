@@ -21,5 +21,3 @@ Welcome!
 I want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.
 
 I really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.
-
-I'll be posting more as I get the chance, but check out my first post:
