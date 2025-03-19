@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aaronpolitsky.github.io/portfolio_blog/about.html</loc>
-    <lastmod>2024-06-24T02:13:55.482Z</lastmod>
+    <lastmod>2024-02-28T12:57:35.397Z</lastmod>
   </url>
   <url>
     <loc>https://aaronpolitsky.github.io/portfolio_blog/posts/purrr_for_data_validation/index.html</loc>
-    <lastmod>2024-06-24T02:13:54.884Z</lastmod>
+    <lastmod>2025-03-15T19:45:46.351Z</lastmod>
   </url>
   <url>
     <loc>https://aaronpolitsky.github.io/portfolio_blog/posts/fantasy_football_luck/index.html</loc>
-    <lastmod>2024-06-24T02:13:52.120Z</lastmod>
+    <lastmod>2025-03-15T19:45:43.984Z</lastmod>
+  </url>
+  <url>
+    <loc>https://aaronpolitsky.github.io/portfolio_blog/posts/dunkbonds/index.html</loc>
+    <lastmod>2025-03-19T17:51:38.746Z</lastmod>
   </url>
   <url>
     <loc>https://aaronpolitsky.github.io/portfolio_blog/index.html</loc>
-    <lastmod>2024-06-24T02:13:55.254Z</lastmod>
+    <lastmod>2025-03-15T20:10:34.957Z</lastmod>
   </url>
 </urlset>
