@@ -6,7 +6,8 @@ listing:
   contents: 
     - "posts/purrr_for_data_validation/*.qmd"
     - "posts/fantasy_football_luck/*.qmd"
-  sort: false
+    - "posts/dunkbonds/*.qmd"
+  sort: "date desc"
   type: default
   categories: true
   sort-ui: false
