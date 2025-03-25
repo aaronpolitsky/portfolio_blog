@@ -7,6 +7,7 @@ listing:
     - "posts/purrr_for_data_validation/*.qmd"
     - "posts/fantasy_football_luck/*.qmd"
     - "posts/dunkbonds/*.qmd"
+    - "posts/hawaii_data_collaborative/*.qmd"
   sort: "date desc"
   type: default
   categories: true

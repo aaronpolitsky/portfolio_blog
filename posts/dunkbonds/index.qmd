@@ -1,0 +1,41 @@
+---
+title: "DUNKbonds"
+subtitle: "About the Rails app I built back in 2012-2013 as a prediction market for personal goals, where losing bets would go to charity. "
+author: "Aaron Politsky"
+date: '2025-03-15'
+categories: [ruby on rails, web development]
+---
+
+## Overview
+
+I built [dunkbonds.com](https://www.dunkbonds.com) for people who wanted to declare a personal goal and then challenge friends and family to bet on whether they'd succeed, with the losing bets going to charity. Its namesake goal was my quest to dunk a basketball for the first time on a regulation hoop by February 28, 2013 (at age 34).
+
+"DUNKbonds" is of course a play on junk bonds, which carry real risk of defaulting. If you bought a DUNKbond from me and I didn't meet my goal, I would pay you back in full. But if I dunked in time, it was like I "defaulted" on the bond, and I'd give your money to charity. And if you bought or sold a bond on the secondary market, that price reflected the market' opinion on whether I'd succeed.
+
+In other words, it was a philanthropic prediction market for personal goals. Goalsetters would get accountability, motivation, and a "market view" on the confidence of their audience. Market participants would have some fun trying to be right, all in the name of charity.
+
+In true procrastinator fashion, I dunked on the very last day before my deadline. I was more surprised than anyone.
+
+This being a coding blog, I'll run through some of the technical aspects below.
+
+## Technical Overview
+
+### On Ruby on Rails
+
+I had no web development experience, so after asking around, I landed on Ruby on Rails. I liked that it was opinionated and structured, and if you didn't try to go against the grain, it made things pretty easy. My background had been in compiled languages like C, C++, as well as the hardware language Verilog, so with Ruby being an interpreted language, it seemed wildly easier to write. I bought a used macbook and got started.
+
+### Model Object Structure and Features
+
+The site is a Rails app in which Goalsetters (really just a special case of User) can create Goals, which other users can Follow, and if they so choose, buy or sell its Bonds. Each Goal has its own blog (remember those?), which are the main way Followers can learn about and stay current with the goal. Users would follow Goals and open Accounts with a goal through which they can buy and sell Bonds.
+
+Some of the features were simple, like setting up follow relationships, which I learned during a rails tutorial.
+
+Other features took a little more thought, but were fairly commonplace, like setting up guest user functionality, so you didn't have to sign up with the site until after you poked around for a while.
+
+But far and away the biggest challenge was the bond market. This was bespoke. I would have loved to find some prebuilt library functionality or an example on the web, but most e-commerce solutions at the time were simply for outright buying things and completing the sale, rather than for setting up a two-sided market where bids and asks could sit for a while. So I had to build my own. Keep in mind this was when I was working in semiconductors, well before I switched to financial regulation. My only finance knowledge came from having read Michael Lewis' [The Big Short]{.underline}.
+
+Behind the scenes I stood up a rudimentary Bond market for each Goal, complete with shopping Carts, order books, a trade wizard, and an escrow account of sorts.
+
+On the blogging functionality, I and other Goalsetters would blog using third party blogging tools (I used Blogger, now defunct) to author and store the actual blog post contents. The site would watch those sites, periodically pull in the blog content into Post objects in the database, then display them in the site.
+
+I'll update this with more when I get some more time.
