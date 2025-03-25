@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aaron Politsky">
+<meta name="dcterms.date" content="2025-03-24">
 
-<title>Aaron’s Data Science and Coding Blog – Aaron's Coding and Data Science Blog</title>
+<title>Hawai’i Data Collaborative Project – Aaron's Coding and Data Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,26 +25,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/cookie-consent/cookie-consent.js"></script>
-<link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +70,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-D0DVM5VY0B"></script>
 
 <script type="text/plain" cookie-consent="tracking">
@@ -128,47 +98,18 @@ cookieconsent.run({
 </script> 
   
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Aaron’s Coding and Data Science Blog</span>
     </a>
   </div>
@@ -179,7 +120,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -202,14 +143,20 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Aaron’s Data Science and Coding Blog</h1>
-            <p class="subtitle lead">Show and Tell, mostly with R</p>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Hawai’i Data Collaborative Project</h1>
+            <p class="subtitle lead">In 2018-19 I worked on a data visualization consulting project with Hawai’i Data Collaborative, to design and implement interactive dashboard visualizations of Well Being metrics.</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Tableau</div>
+                <div class="quarto-category">data visualization</div>
+                <div class="quarto-category">interactivity</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
       <div>
       <div class="quarto-title-meta-heading">Author</div>
@@ -218,194 +165,36 @@ window.Quarto = {
             </div>
     </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 24, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Tableau">Tableau <span class="quarto-category-count">(1)</span></div><div class="category" data-category="data science">data science <span class="quarto-category-count">(2)</span></div><div class="category" data-category="data visualization">data visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="functional programming">functional programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="interactivity">interactivity <span class="quarto-category-count">(1)</span></div><div class="category" data-category="nested tibbles">nested tibbles <span class="quarto-category-count">(1)</span></div><div class="category" data-category="purrr">purrr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ruby on rails">ruby on rails <span class="quarto-category-count">(1)</span></div><div class="category" data-category="web development">web development <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
-<p>Welcome!</p>
-<p>I want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.</p>
-<p>I really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.</p>
+<p>Head over to Hawai’i Data Collaborative site to view the archived interactive dashboards.</p>
+<p>For example:</p>
+<div class="tableauPlaceholder" id="viz1742867190184" style="position: relative"><noscript><a href="https://www.hawaiidata.org/"><img alt="ALL Region Communities " src="https://public.tableau.com/static/images/Q8/Q8DJKQ3G8/1_rss.png" style="border: none"></a></noscript><object class="tableauViz" style="display:none;"><param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F"> <param name="embed_code_version" value="3"> <param name="path" value="shared/Q8DJKQ3G8"> <param name="toolbar" value="no"><param name="static_image" value="https://public.tableau.com/static/images/Q8/Q8DJKQ3G8/1.png"> <param name="animate_transition" value="yes"><param name="display_static_image" value="yes"><param name="display_spinner" value="yes"><param name="display_overlay" value="yes"><param name="display_count" value="yes"><param name="tabs" value="no"><param name="language" value="en"><param name="filter" value="publish=yes"></object></div>                <script type="text/javascript">                    var divElement = document.getElementById('viz1742867190184');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='100%';vizElement.style.height='700px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='100%';vizElement.style.height='700px';} else { vizElement.style.width='100%';vizElement.style.height='170px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+<p>I’ll write more about the behind-the-scenes when I get some free time.</p>
 
 
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="R,Tableau,data visualization,interactivity" data-listing-date-sort="1742788800000" data-listing-file-modified-sort="1742867437255" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="269">
-<div class="thumbnail">
-<p><a href="./posts/hawaii_data_collaborative/index.html" class="no-external"></a></p><a href="./posts/hawaii_data_collaborative/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/hawaii_data_collaborative/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/hawaii_data_collaborative/index.html" class="no-external">Hawai’i Data Collaborative Project</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/hawaii_data_collaborative/index.html" class="no-external">In 2018-19 I worked on a data visualization consulting project with Hawai’i Data Collaborative, to design and implement interactive dashboard visualizations of Well Being metrics.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Tableau'); return false;">
-Tableau
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('data visualization'); return false;">
-data visualization
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('interactivity'); return false;">
-interactivity
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/hawaii_data_collaborative/index.html" class="no-external">Head over to Hawai’i Data Collaborative site to view the archived interactive dashboards.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/hawaii_data_collaborative/index.html" class="no-external">
-<div class="listing-date">
-Mar 24, 2025
-</div>
-<div class="listing-author">
-Aaron Politsky
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="ruby on rails,web development" data-listing-date-sort="1742011200000" data-listing-file-modified-sort="1742407638531" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="609">
-<div class="thumbnail">
-<p><a href="./posts/dunkbonds/index.html" class="no-external"></a></p><a href="./posts/dunkbonds/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/dunkbonds/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/dunkbonds/index.html" class="no-external">DUNKbonds</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/dunkbonds/index.html" class="no-external">About the Rails app I built back in 2012-2013 as a prediction market for personal goals, where losing bets would go to charity. </a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('ruby on rails'); return false;">
-ruby on rails
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('web development'); return false;">
-web development
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/dunkbonds/index.html" class="no-external">I built dunkbonds.com for people who wanted to declare a personal goal and then challenge friends and family to bet on whether they’d succeed, with the losing bets going to…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/dunkbonds/index.html" class="no-external">
-<div class="listing-date">
-Mar 15, 2025
-</div>
-<div class="listing-author">
-Aaron Politsky
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="data science,functional programming,purrr,nested tibbles,R" data-listing-date-sort="1707627600000" data-listing-file-modified-sort="1742067946351" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3089">
-<div class="thumbnail">
-<p><a href="./posts/purrr_for_data_validation/index.html" class="no-external"></a></p><a href="./posts/purrr_for_data_validation/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/purrr_for_data_validation/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/purrr_for_data_validation/index.html" class="no-external">Purrr for Data Validation</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/purrr_for_data_validation/index.html" class="no-external">Or: Nesting Functions Into a Tibble</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data science'); return false;">
-data science
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('functional programming'); return false;">
-functional programming
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('purrr'); return false;">
-purrr
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('nested tibbles'); return false;">
-nested tibbles
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/purrr_for_data_validation/index.html" class="no-external">Tidyverse R enthusiasts know about nesting grouped data into a column and iterating using purrr::map(), but did you know you could nest function source code? This post uses a data validation example to explain how I used this nest-and-iterate pattern over a set of validation tests while keeping the tests, their code, and their results in one Tidy tibble.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/purrr_for_data_validation/index.html" class="no-external">
-<div class="listing-date">
-Feb 11, 2024
-</div>
-<div class="listing-author">
-Aaron Politsky
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="data science" data-listing-date-sort="1707627600000" data-listing-file-modified-sort="1742067943984" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="533">
-<div class="thumbnail">
-<p><a href="./posts/fantasy_football_luck/index.html" class="no-external"></a></p><a href="./posts/fantasy_football_luck/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/fantasy_football_luck/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/fantasy_football_luck/index.html" class="no-external">Coming Soon: Fantasy Football Schedule Luck</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/fantasy_football_luck/index.html" class="no-external">Measuring the Impact of Head-to-Head Schedules on Playoff Berths</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data science'); return false;">
-data science
-</div>
-</div>
-<div class="listing-description">
-<a href="./posts/fantasy_football_luck/index.html" class="no-external">Your fantasy team put up a ton of points over the season, yet you missed the playoffs because your opponents always had their best weeks against you. How would your season have gone if you had a different schedule? I re-simulate 15 years of league history to quantify how un/lucky my league’s participants have been and to measure how much making the playoffs depends on schedule. (Spolier: a LOT!)</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/fantasy_football_luck/index.html" class="no-external">
-<div class="listing-date">
-Feb 11, 2024
-</div>
-<div class="listing-author">
-Aaron Politsky
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

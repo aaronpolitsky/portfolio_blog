@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/hawaii_data_collaborative/index.html",
       "/posts/dunkbonds/index.html",
       "/posts/purrr_for_data_validation/index.html",
       "/posts/fantasy_football_luck/index.html"
