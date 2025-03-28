@@ -1,0 +1,264 @@
+---
+title: "analyzing autocross data"
+author: "Aaron Politsky"
+---
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+
+library(ranger)
+
+cores <- parallel::detectCores()
+
+
+nats_east_2023_run1 <- read_csv(file = "data/2023 Nats - East Course-export-2025-03-25 15-54-08/2023 Nats - East Course-Aaron-1.csv")
+
+
+nats_east_2023_run1 <-
+  nats_east_2023_run1 %>%
+  select(`GPS_TIME (ms)`:`LAT (deg)`, 
+         `SPEED (m/s)`,
+         `ACCEL_X (m/s^2)`:`STEERING (deg)`,
+         #ANALOG_1:ANALOG_4,
+         MATH_HEADING, 
+         MATH_ACCEL_2D_SUM,
+         MATH_USER_DEFINED_1) %>%
+  arrange(`GPS_TIME (ms)`) %>%
+  rename(lat = `LAT (deg)`, 
+         long = `LONG (deg)`,
+         rear_wheelspeed_minus_front = MATH_USER_DEFINED_1) %>%
+  mutate(across(
+    c(lat, long),
+    .fns = \(x) lead(x, n = 5, order_by = `GPS_TIME (ms)`) - x,
+    .names = "{col}_delta_200ms"
+  )) %>% 
+  select(-c(lat, long)) %>% 
+  filter(`GPS_TIME (ms)` < 1694012335000) # in the finish chute of the run
+```
+
+We'll use tidymodels recipes. Let's create a recipe for latitude and longitude
+
+```{r}
+
+set.seed(99)
+splits      <- initial_split(nats_east_2023_run1)
+
+nats_east_2023_run1_train <- training(splits)
+nats_east_2023_run1_test  <- testing(splits)
+
+val_set <- validation_split(nats_east_2023_run1_train, 
+                            prop = 0.8)
+
+
+library(corrplot)
+
+nats_east_2023_run1 %>% cor %>% corrplot(diag = F)
+```
+
+```{r}
+lat_recipe <- 
+  recipe(lat_delta_200ms ~ ., data = nats_east_2023_run1_train) %>% 
+  update_role(`GPS_TIME (ms)`, long_delta_200ms, new_role = "ID") %>%
+  step_zv(all_predictors())  
+
+lat_recipe %>% prep 
+```
+
+```{r}
+
+
+lat_mod <- 
+  rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% 
+  set_engine("ranger", 
+             num.threads = cores,
+             importance = "impurity") %>% 
+  set_mode("regression")
+
+
+lat_wflow <- 
+  workflow() %>% 
+  add_model(lat_mod) %>% 
+  add_recipe(lat_recipe) 
+
+set.seed(99)
+
+lat_res <- 
+  lat_wflow %>%
+  tune_grid(resamples = val_set,
+            grid = 25, 
+            metrics = metric_set(rsq))
+
+
+lat_res %>% show_best(metric = "rsq") %>% arrange(mean) %>% head(n = 30)
+
+autoplot(lat_res)
+  
+
+```
+
+```{r}
+lat_best <- 
+  lat_res %>% 
+  select_best(metric = "rsq")
+
+final_lat_mod <- 
+  rand_forest(mtry = lat_best$mtry, min_n = lat_best$min_n, trees = 1000) %>% 
+  set_engine("ranger", num.threads = cores, importance = "impurity") %>% 
+  set_mode("regression")
+
+final_lat_wflow <- 
+  lat_wflow %>%
+  update_model(final_lat_mod) 
+  
+set.seed(99)
+
+final_lat_fit <- 
+  final_lat_wflow %>% 
+  last_fit(splits)
+
+final_lat_fit %>% 
+  collect_metrics()
+
+library(vip)
+
+fitted_lat <- 
+  final_lat_fit %>% 
+  extract_fit_parsnip() 
+
+fitted_lat %>% 
+  vip(num_features = 30)
+```
+
+```{r}
+long_recipe <- 
+  recipe(long_delta_200ms ~ ., data = nats_east_2023_run1_train) %>% 
+  update_role(`GPS_TIME (ms)`, lat_delta_200ms, new_role = "ID") %>%
+  step_zv(all_predictors())  
+
+long_recipe %>% prep
+```
+
+```{r}
+
+
+long_mod <- 
+  rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% 
+  set_engine("ranger", 
+             num.threads = cores,
+             importance = "impurity") %>% 
+  set_mode("regression")
+
+
+long_wflow <- 
+  workflow() %>% 
+  add_model(long_mod) %>% 
+  add_recipe(long_recipe) 
+
+set.seed(99)
+
+long_res <- 
+  long_wflow %>%
+  tune_grid(resamples = val_set,
+            grid = 25, 
+            metrics = metric_set(rsq))
+
+
+long_res %>% show_best(metric = "rsq") %>% arrange(mean) %>% head(n = 30)
+
+autoplot(long_res)
+  
+
+```
+
+```{r}
+long_best <- 
+  long_res %>% 
+  select_best(metric = "rsq")
+
+final_long_mod <- 
+  rand_forest(mtry = long_best$mtry, min_n = long_best$min_n, trees = 1000) %>% 
+  set_engine("ranger", num.threads = cores, importance = "impurity") %>% 
+  set_mode("regression")
+
+final_long_wflow <- 
+  long_wflow %>%
+  update_model(final_long_mod) 
+  
+set.seed(99)
+
+final_long_fit <- 
+  final_long_wflow %>% 
+  last_fit(splits)
+
+final_long_fit %>% 
+  collect_metrics()
+
+library(vip)
+
+fitted_long <- 
+  final_long_fit %>% 
+  extract_fit_parsnip() 
+
+fitted_long %>% 
+  vip(num_features = 30)
+```
+
+```{r}
+run1_with_preds <- 
+  nats_east_2023_run1 %>% 
+  bind_cols(fitted_lat %>% predict(new_data = nats_east_2023_run1)) %>%
+  rename(pred_lat_delta_200ms = .pred) %>% 
+  bind_cols(fitted_long %>% predict(new_data = nats_east_2023_run1)) %>%
+  rename(pred_long_delta_200ms = .pred) %>% 
+  mutate(distance_error = sqrt((pred_long_delta_200ms - long_delta_200ms)^2 + 
+                                 (pred_lat_delta_200ms - lat_delta_200ms)^2)) %>% 
+  mutate(lat_error = pred_lat_delta_200ms - lat_delta_200ms,
+         long_error = pred_long_delta_200ms - long_delta_200ms) 
+
+
+run1_with_preds %>% 
+  ggplot(aes(x = lat_error, y = long_error)) + geom_density2d()
+```
+
+## run 3
+
+```{r}
+
+
+nats_east_2023_run3 <- 
+  read_csv(file = "data/2023 Nats - East Course-export-2025-03-25 15-54-08/2023 Nats - East Course-Aaron-3.csv") %>% 
+  rename(lat = `LAT (deg)`, 
+         long = `LONG (deg)`,
+         rear_wheelspeed_minus_front = MATH_USER_DEFINED_1) %>%
+  mutate(across(
+    c(lat, long),
+    .fns = \(x) lead(x, n = 5, order_by = `GPS_TIME (ms)`) - x,
+    .names = "{col}_delta_200ms"
+  )) %>% 
+  slice_head(prop = .5)
+
+nats_east_2023_run3 %>%
+  ggplot(aes(x = lat, y = long)) + 
+  geom_path()
+
+nats_east_2023_run3 <- 
+  nats_east_2023_run3 %>% 
+  select(-lat, -long)
+
+run3_with_preds <- 
+  nats_east_2023_run3 %>% 
+  bind_cols(fitted_lat %>% predict(new_data = nats_east_2023_run3)) %>%
+  rename(pred_lat_delta_200ms = .pred) %>% 
+  bind_cols(fitted_long %>% predict(new_data = nats_east_2023_run3)) %>%
+  rename(pred_long_delta_200ms = .pred) %>% 
+  mutate(distance_error = sqrt((pred_long_delta_200ms - long_delta_200ms)^2 + 
+                                 (pred_lat_delta_200ms - lat_delta_200ms)^2)) %>%
+    mutate(lat_error = pred_lat_delta_200ms - lat_delta_200ms,
+         long_error = pred_long_delta_200ms - long_delta_200ms) 
+
+ggplot() + 
+  geom_density2d(data = run1_with_preds, aes(x = lat_error, y = long_error), color = "blue") + 
+  geom_density2d(data = run3_with_preds, aes(x = lat_error, y = long_error), color = "red") 
+  
+```
