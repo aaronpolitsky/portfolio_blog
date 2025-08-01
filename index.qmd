@@ -8,6 +8,8 @@ listing:
     - "posts/fantasy_football_luck/*.qmd"
     - "posts/dunkbonds/*.qmd"
     - "posts/hawaii_data_collaborative/*.qmd"
+    - "posts/autocross_data/*.qmd"
+    - "posts/vr_shuffleboard/*.qmd"
   sort: "date desc"
   type: default
   categories: true
