@@ -1,0 +1,13 @@
+---
+title: "Building a VR Shuffleboard Game"
+subtitle: "My first attempt at game development. I and copilot struggle together."
+author: "Aaron Politsky"
+date: '2025-08-01'
+categories: [VR, game development, C#]
+---
+
+When a friend told me there was a shuffleboard club opening in Chicago in the winter of 2018 and asked if I wanted to join a monday night league, I figured sure. Well, it hooked me instantly, largely because it's secretly a great game, and more lastingly because of the great community of the oddball competitors it attracts, self very much included. Some of us lovable idiots play Virtual Reality minigolf now and then, so naturally we'd love to play shuffleboard in VR. I have no idea how to build a game, but armed with some help from a github copilot trial, I'm giving it a shot.
+
+It's a slow process, but here's some early progress:
+
+{{< video https://www.youtube.com/watch?v=0tIzJ3PGfiQ >}}
