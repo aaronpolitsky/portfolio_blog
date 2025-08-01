@@ -7,10 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aaron Politsky">
-<meta name="dcterms.date" content="2024-02-11">
-<meta name="description" content="Your fantasy team put up a ton of points over the season, yet you missed the playoffs because your opponents always had their best weeks against you. How would your season have gone if you had a different schedule? I re-simulate 15 years of league history to quantify how un/lucky my league’s participants have been and to measure how much making the playoffs depends on schedule. (Spolier: a LOT!)">
 
-<title>Coming Soon: Fantasy Football Schedule Luck – Aaron’s Coding and Data Science Blog</title>
+<title>Building a VR Shuffleboard Game – Aaron’s Coding and Data Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -45,6 +43,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -146,15 +146,11 @@ cookieconsent.run({
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Coming Soon: Fantasy Football Schedule Luck</h1>
-            <p class="subtitle lead">Measuring the Impact of Head-to-Head Schedules on Playoff Berths</p>
-                  <div>
-        <div class="description">
-          Your fantasy team put up a ton of points over the season, yet you missed the playoffs because your opponents always had their best weeks against you. How would your season have gone if you had a different schedule? I re-simulate 15 years of league history to quantify how un/lucky my league’s participants have been and to measure how much making the playoffs depends on schedule. (Spolier: a LOT!)
-        </div>
-      </div>
-                          <div class="quarto-categories">
-                <div class="quarto-category">data science</div>
+      <h1 class="title">Building a VR Shuffleboard Game</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">VR</div>
+                <div class="quarto-category">game development</div>
+                <div class="quarto-category">C#</div>
               </div>
                   </div>
   </div>
@@ -169,12 +165,6 @@ cookieconsent.run({
             </div>
     </div>
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">February 11, 2024</p>
-      </div>
-    </div>
     
       
     </div>
@@ -191,44 +181,13 @@ cookieconsent.run({
 
 
 
-<p>Coming soon.</p>
-<p>I need to dust off the old code (base R!), so i’ll be a minute, but the gist is:</p>
-<ul>
-<li><p>In 2018 I scraped my ESPN fantasy league’s 15-season history, saving the weekly league members’ points in a csv.</p></li>
-<li><p>Then I re-simulated every season a million times, taking each owner’s weekly score as given, but randomizing the season’s head to head schedules.</p></li>
-<li><p>With the simulation results we can explore owners’ win-loss distributions, their expected win rates, see who got lucky or unlucky in a given year, and if there’s been any persistent luck pattern over the years.</p></li>
-<li><p>I find that schedule plays a huge role in determining playoff berths and using an all-play schedule format (where you play every other team each week) would mitigate this.</p></li>
-</ul>
-<section id="intro" class="level2">
-<h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p>Most fantasy football leagues use a head-to-head format, basing playoff berths on win-loss records. Meaning, every week of the regular season, your fantasy team goes up against another participant’s team, and whichever team scored more points gets the win. At the end of the regular season, your head-to-head win-loss record determines whether you make the playoffs. I’m simplifying of course, but the win-loss record is typically the chief determinant of playoff berth.</p>
-<p>Under this format, it’s quite common for your team to have a low scoring week but still eke out a win because your opponent’s team had an even lower score. On the flipside, you may have had the second highest score for the week, but you faced the team with the highest score. Contrary to real football, your fantasy football opponent’s team has basically no bearing on how well your team performs. By and large you are trying for the highest score<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, so your opponent is basically interchangeable. So it’s legitimate to claim that your record may have been meaningfully better (or worse) had your regular season schedule been different.</p>
-<p>I wondered how my league’s results might have been different under different schedules, so I set out to measure the impact scheduling had on playoff berths over the years by simulating alternate schedules and analyzing the distribution of results.</p>
-<p>I found …</p>
-</section>
-<section id="the-plan-resimulate-league-history-with-alternate-schedules" class="level2">
-<h2 class="anchored" data-anchor-id="the-plan-resimulate-league-history-with-alternate-schedules">The Plan: Resimulate League History with Alternate Schedules</h2>
-<ul>
-<li><p>I scraped my ESPN fantasy league’s 13-season history, saving each team’s weekly points in a csv.</p></li>
-<li><p>Then I re-simulated every season a million times, taking each owner’s weekly score as given, but randomizing the season’s head to head schedules.</p></li>
-<li><p>With the simulation results we can explore owners’ win-loss distributions, their expected win rates, and see who got lucky or unlucky in a given year, and if any participants have enjoyed persistent luckiness over the years.</p></li>
-<li><p>I find that schedule plays a huge role in determining playoff berth and that using an all-play schedule format (where you play every other team each week) would mitigate this.</p></li>
-</ul>
-</section>
-<section id="reading-the-league-history" class="level2">
-<h2 class="anchored" data-anchor-id="reading-the-league-history">Reading the League History</h2>
-<p>… (when I get to it)</p>
+<p>When a friend told me there was a shuffleboard club opening in Chicago in the winter of 2018 and asked if I wanted to join a monday night league, I figured sure. Well, it hooked me instantly, largely because it’s secretly a great game, and more lastingly because of the great community of the oddball competitors it attracts, self very much included. Some of us lovable idiots play Virtual Reality minigolf now and then, so naturally we’d love to play shuffleboard in VR. I have no idea how to build a game, but armed with some help from a github copilot trial, I’m giving it a shot.</p>
+<p>It’s a slow process, but here’s some early progress:</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="vr_shuffle_early_demo.mp4"></video></div>
 
 
-</section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I acknowledge that in a given week you might start a lower risk-reward player if you expect to win the matchup, and vice versa if you are the underdog. But I would argue this is only important on the margin and that job one is to maximize expected points.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -301,7 +260,7 @@ cookieconsent.run({
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/aaronpolitsky\.github\.io\/portfolio_blog\/");
+        var filterRegex = new RegExp('/' + window.location.host + '/');
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -642,6 +601,7 @@ cookieconsent.run({
     </div>
   </div>
 </footer>
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

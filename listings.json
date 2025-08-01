@@ -2,6 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/vr_shuffleboard/index.html",
+      "/posts/autocross_data/index.html",
       "/posts/hawaii_data_collaborative/index.html",
       "/posts/dunkbonds/index.html",
       "/posts/purrr_for_data_validation/index.html",
