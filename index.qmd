@@ -1,6 +1,6 @@
 ---
 title: "Aaron's Data Science and Coding Blog"
-subtitle: "Show and Tell, mostly with R" 
+subtitle: "Show and Tell" 
 author: "Aaron Politsky"
 listing:
   contents: 
@@ -22,5 +22,3 @@ title-block-banner: true
 Welcome!
 
 I want to get some of my coding thoughts out into the world, so this is a sort of code portfolio in blog form.
-
-I really enjoy the Posit/RStudio workflows, as well as coding in R, so I used Quarto to build this.
