@@ -3,6 +3,7 @@ title: "analyzing autocross data"
 subtitle: 'Some rough experimentation with some telematics data from an autocross event.'
 author: "Aaron Politsky"
 date: '2025-03-28'
+categories: [telematics]
 ---
 
 ```{r}
